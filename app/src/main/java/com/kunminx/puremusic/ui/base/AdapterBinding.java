@@ -34,6 +34,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
+import com.kunminx.architecture.utils.ClickUtils;
 import com.kunminx.architecture.utils.Utils;
 import com.kunminx.puremusic.R;
 import com.kunminx.architecture.ui.adapter.CommonViewPagerAdapter;
@@ -86,6 +87,13 @@ public class AdapterBinding {
         }
     }
 
+    @BindingAdapter(value = {"allowDrawerOpen"}, requireAll = false)
+    public static void allowDrawerOpen(DrawerLayout drawerLayout, boolean allowDrawerOpen) {
+        drawerLayout.setDrawerLockMode(allowDrawerOpen
+                ? DrawerLayout.LOCK_MODE_UNLOCKED
+                : DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
     @BindingAdapter(value = {"isPlaying"}, requireAll = false)
     public static void isPlaying(PlayPauseView pauseView, boolean isPlaying) {
         if (isPlaying) {
@@ -123,7 +131,7 @@ public class AdapterBinding {
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 Uri uri = request.getUrl();
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 Utils.getApp().startActivity(intent);
                 return true;
             }
@@ -156,10 +164,8 @@ public class AdapterBinding {
         webView.loadUrl(loadPage);
     }
 
-    @BindingAdapter(value = {"allowDrawerOpen"}, requireAll = false)
-    public static void allowDrawerOpen(DrawerLayout drawerLayout, boolean allowDrawerOpen) {
-        drawerLayout.setDrawerLockMode(allowDrawerOpen
-                ? DrawerLayout.LOCK_MODE_UNLOCKED
-                : DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    @BindingAdapter(value = {"onClickWithDebouncing"}, requireAll = false)
+    public static void onClickWithDebouncing(View view, View.OnClickListener clickListener) {
+        ClickUtils.applySingleDebouncing(view, clickListener);
     }
 }
